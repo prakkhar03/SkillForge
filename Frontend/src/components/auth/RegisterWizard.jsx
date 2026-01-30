@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuthStore } from '../../store/authStore';
 import { ChevronRight, ChevronLeft, Check } from 'lucide-react';
@@ -12,7 +13,8 @@ import Step4Confirm from './steps/Step4Confirm';
 import SuccessState from './SuccessState';
 
 const RegisterWizard = () => {
-    const { step, nextStep, prevStep, role, setAuthMode } = useAuthStore();
+    const { step, nextStep, prevStep, role, setAuthMode, signup } = useAuthStore();
+    const navigate = useNavigate();
     const [isSuccess, setIsSuccess] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
@@ -45,13 +47,25 @@ const RegisterWizard = () => {
         }
     };
 
-    const handleComplete = () => {
+    const handleComplete = async () => {
         setIsLoading(true);
-        // Simulate API call
-        setTimeout(() => {
-            setIsLoading(false);
+        try {
+            const user = await signup();
             setIsSuccess(true);
-        }, 2000);
+            // Delay for success animation before redirect
+            setTimeout(() => {
+                if (user.role === 'student') {
+                    navigate('/student/dashboard');
+                } else if (user.role === 'client') {
+                    navigate('/client/dashboard');
+                }
+            }, 2000);
+        } catch (error) {
+            console.error(error);
+            // Handle error (maybe show a toast or alert - simple alert for now)
+            alert('Registration failed: ' + error.message);
+            setIsLoading(false);
+        }
     };
 
     if (isSuccess) {
