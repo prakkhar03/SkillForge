@@ -3,6 +3,8 @@ from rest_framework.response import Response
 from rest_framework import status, permissions
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import IsAuthenticated
+from verification.services import generate_partial_report
+
 
 from .serializers import (
     RegisterSerializer,
@@ -84,6 +86,7 @@ class OnboardingAPI(APIView):
 
         serializer.is_valid(raise_exception=True)
         serializer.save()
+        generate_partial_report(user.id)
 
         user.onboarding_stage = 2
         user.verified = True
@@ -124,22 +127,22 @@ class ProfileUpdateAPI(APIView):
             return Response({"error": "Invalid role"}, status=400)
         serializer.is_valid(raise_exception=True)
         serializer.save()
+        generate_partial_report(user.id)
+
 
         return Response({
             "message": "Profile updated",
             "data": serializer.data
         })
-class LoginAPI(APIView):
-    permission_classes = []
+
+class LogoutAPI(APIView):
+    permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        serializer = LoginSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-
-        user = serializer.validated_data["user"]
-
-        return Response({
-            "tokens": get_tokens(user),
-            "role": user.role,
-            "onboarding_stage": user.onboarding_stage
-        })
+        try:
+            refresh_token = request.data["refresh"]
+            token = RefreshToken(refresh_token)
+            token.blacklist()
+            return Response({"message": "Logged out successfully"})
+        except Exception as e:
+            return Response({"error": "Invalid token"}, status=400)

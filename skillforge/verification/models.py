@@ -43,13 +43,32 @@ class SkillVerification(models.Model):
     def __str__(self):
         return f"{self.user.email} - Trust {self.trust_score}"
 
+class PersonalityTest(models.Model):
+
+
+    title = models.CharField(max_length=255)
+    description = models.TextField(blank=True)
+
+    is_active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.title
+
+
 
 class PersonalityQuestion(models.Model):
+    test = models.ForeignKey(
+        PersonalityTest,
+        related_name="questions",
+        on_delete=models.CASCADE
+    )
+
     text = models.TextField()
     order = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return self.text[:50]
+
 
 
 class PersonalityOption(models.Model):
@@ -60,15 +79,24 @@ class PersonalityOption(models.Model):
     )
 
     text = models.CharField(max_length=255)
+
+    # scoring weight
     score = models.IntegerField(default=0)
+
+    def __str__(self):
+        return f"{self.text} ({self.score})"
+
 
 
 class PersonalityAttempt(models.Model):
+ 
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name="personality_attempts"
     )
+
+    test = models.ForeignKey(PersonalityTest, on_delete=models.CASCADE)
 
     total_score = models.IntegerField(default=0)
 
@@ -78,23 +106,13 @@ class PersonalityAttempt(models.Model):
             ("slow", "Slow"),
             ("average", "Average"),
             ("fast", "Fast"),
-        ),
-        blank=True
+        )
     )
 
-    completed_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
-
-class PersonalityAnswer(models.Model):
-    attempt = models.ForeignKey(
-        PersonalityAttempt,
-        related_name="answers",
-        on_delete=models.CASCADE
-    )
-
-    question = models.ForeignKey(PersonalityQuestion, on_delete=models.CASCADE)
-    selected_option = models.ForeignKey(PersonalityOption, on_delete=models.CASCADE)
-
+    def __str__(self):
+        return f"{self.user.email} - {self.learning_level}"
 
 
 class SkillCategory(models.Model):
@@ -106,31 +124,37 @@ class SkillCategory(models.Model):
 
 
 class SkillTestAttempt(models.Model):
-  
-
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name="skill_attempts"
     )
 
-    category = models.ForeignKey(SkillCategory, on_delete=models.CASCADE)
+    category = models.ForeignKey(
+        SkillCategory,
+        on_delete=models.CASCADE
+    )
+
+    proctor_session = models.OneToOneField(
+        "proctor.ExamSession",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="skill_attempt"
+    )
+
     generated_questions = models.JSONField(default=list)
     submitted_answers = models.JSONField(default=list)
-    score = models.FloatField(default=0)
+
     total_questions = models.IntegerField(default=0)
+    score = models.IntegerField(default=0)
     percentage = models.FloatField(default=0)
     passed = models.BooleanField(default=False)
-    ai_feedback = models.JSONField(default=dict)
-    tab_switch_count = models.IntegerField(default=0)
-    face_detection_flags = models.IntegerField(default=0)
 
-    is_flagged = models.BooleanField(default=False)
-    flag_level = models.CharField(max_length=10, blank=True)
+    ai_feedback = models.JSONField(default=dict)
 
     started_at = models.DateTimeField(auto_now_add=True)
     completed_at = models.DateTimeField(null=True, blank=True)
-
     is_evaluated = models.BooleanField(default=False)
 
     def __str__(self):
