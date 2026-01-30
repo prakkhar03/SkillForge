@@ -43,69 +43,24 @@ class SkillVerification(models.Model):
     def __str__(self):
         return f"{self.user.email} - Trust {self.trust_score}"
 
-class PersonalityTest(models.Model):
-
-
-    title = models.CharField(max_length=255)
-    description = models.TextField(blank=True)
-
-    is_active = models.BooleanField(default=True)
-
-    def __str__(self):
-        return self.title
-
-
-
-class PersonalityQuestion(models.Model):
-    test = models.ForeignKey(
-        PersonalityTest,
-        related_name="questions",
-        on_delete=models.CASCADE
-    )
-
-    text = models.TextField()
-    order = models.PositiveIntegerField(default=0)
-
-    def __str__(self):
-        return self.text[:50]
-
-
-
-class PersonalityOption(models.Model):
-    question = models.ForeignKey(
-        PersonalityQuestion,
-        related_name="options",
-        on_delete=models.CASCADE
-    )
-
-    text = models.CharField(max_length=255)
-
-    # scoring weight
-    score = models.IntegerField(default=0)
-
-    def __str__(self):
-        return f"{self.text} ({self.score})"
-
-
-
 class PersonalityAttempt(models.Model):
- 
+
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name="personality_attempts"
     )
 
-    test = models.ForeignKey(PersonalityTest, on_delete=models.CASCADE)
+    answers = models.JSONField(default=list)
 
     total_score = models.IntegerField(default=0)
 
     learning_level = models.CharField(
         max_length=20,
         choices=(
-            ("slow", "Slow"),
-            ("average", "Average"),
             ("fast", "Fast"),
+            ("average", "Average"),
+            ("slow", "Slow"),
         )
     )
 
@@ -113,7 +68,6 @@ class PersonalityAttempt(models.Model):
 
     def __str__(self):
         return f"{self.user.email} - {self.learning_level}"
-
 
 class SkillCategory(models.Model):
     name = models.CharField(max_length=255, unique=True)

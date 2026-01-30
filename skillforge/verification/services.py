@@ -194,34 +194,34 @@ def get_final_analysis(student_id: int):
 
 
 
-def submit_personality_assessment(student_id: int, test_id: int, answers: dict):
-    
 
-    attempt = PersonalityAttempt.objects.create(
-        user_id=student_id,
-        test_id=test_id
-    )
+from .personality_data import PERSONALITY_QUESTIONS
 
+
+
+def submit_personality_assessment(user, answers):
     total = 0
 
-    for option_id in answers.values():
-        option = PersonalityOption.objects.get(id=option_id)
-        total += option.score
+    for q in PERSONALITY_QUESTIONS:
+        choice = answers.get(str(q["id"]))
+        if choice:
+            total += q["options"].get(choice, 0)
 
-    # simple level logic
-    if total < 40:
-        level = "slow"
-    elif total < 70:
+    if total >= 24:
+        level = "fast"
+    elif total >= 16:
         level = "average"
     else:
-        level = "fast"
+        level = "slow"
 
-    attempt.total_score = total
-    attempt.learning_level = level
-    attempt.save()
+    attempt = PersonalityAttempt.objects.create(
+        user=user,
+        answers=answers,
+        total_score=total,
+        learning_level=level
+    )
 
-    # store in StudentReport (used for module generation)
-    report = StudentReport.objects.get(student__user_id=student_id)
+    report = StudentReport.objects.get(student=user.student_profile)
     report.personality_score = total
     report.save()
 

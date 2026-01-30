@@ -2,7 +2,8 @@ from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
-
+from .services import submit_personality_assessment
+from .personality_data import PERSONALITY_QUESTIONS
 from .services import *
 
 class GenerateSkillTestAPI(APIView):
@@ -51,13 +52,21 @@ class SubmitSkillTestAPI(APIView):
 
         return Response(result)
 
+
+
+class PersonalityQuestionsAPI(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        return Response(PERSONALITY_QUESTIONS)
+
+
 class SubmitPersonalityAPI(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
         result = submit_personality_assessment(
-            request.user.id,
-            request.data["test_id"],
-            request.data["answers"]
+            request.user,
+            request.data.get("answers", {})
         )
         return Response(result)
