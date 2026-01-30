@@ -1,6 +1,8 @@
 from django.urls import path
-from . import views
+from .views import *
 
-
-url_patterns = [
+urlpatterns = [
+    path("upskill/generate/", GenerateUpskillModuleAPI.as_view()),
+    path("upskill/modules/", ListUpskillModulesAPI.as_view()),
+    path("upskill/<int:module_id>/", GetUpskillModuleAPI.as_view()),
 ]

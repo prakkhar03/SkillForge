@@ -2,7 +2,6 @@ import logging
 from django.contrib.auth import get_user_model
 
 from accounts.models import *
-from accounts.models import *
 from .models import *
 from proctor.models import Exam, ExamSession
 from .utils.pdf_utils import extract_text_from_pdf_fileobj
