@@ -1,6 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User
-
+from django.conf import settings
 class Exam(models.Model):
     title = models.CharField(max_length=200)
     duration_minutes = models.PositiveIntegerField()
@@ -24,7 +23,12 @@ class Question(models.Model):
 
 
 class ExamSession(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="exam_sessions"
+    )
+
     exam = models.ForeignKey(Exam, on_delete=models.CASCADE)
     started_at = models.DateTimeField(auto_now_add=True)
     ended_at = models.DateTimeField(null=True, blank=True)
