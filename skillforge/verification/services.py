@@ -66,21 +66,43 @@ def generate_partial_report(student_id: int):
 
 
 
-
-def generate_skill_test_for_student(student_id: int, category_id: int):
-   
+def generate_skill_test_for_student(student_id: int, category_id: int | None = None):
 
     try:
         user = User.objects.get(id=student_id)
 
         report = StudentReport.objects.get(student=user.student_profile)
 
-        category = SkillCategory.objects.get(id=category_id)
+        summary = report.report_summary or {}
+
+        if category_id:
+            category = SkillCategory.objects.get(id=category_id)
+
+        else:
+            resume_data = summary.get("resume_analysis", {})
+            github_data = summary.get("github_analysis", {})
+
+            skills = []
+
+            if isinstance(resume_data, dict):
+                skills += resume_data.get("skills", [])
+
+            if isinstance(github_data, dict):
+                skills += github_data.get("skills", [])
+
+            if not skills:
+                skills = ["Python"]
+
+            primary_skill = skills[0]
+
+            category, _ = SkillCategory.objects.get_or_create(
+                name=primary_skill.title()
+            )
 
         payload = generate_test(
-            resume_analysis=str(report.report_summary.get("resume_analysis", "")),
-            github_analysis=str(report.report_summary.get("github_analysis", "")),
-            recommendation=str(report.report_summary.get("summary", "")),
+            resume_analysis=str(summary.get("resume_analysis", "")),
+            github_analysis=str(summary.get("github_analysis", "")),
+            recommendation=str(summary.get("summary", "")),
             num_questions=5,
             role_hint=category.name
         )
@@ -94,10 +116,9 @@ def generate_skill_test_for_student(student_id: int, category_id: int):
 
         return attempt
 
-    except Exception as e:
+    except Exception:
         logger.exception("Skill test generation failed")
         raise
-
 
 def submit_skill_test(student_id: int, attempt_id: int, answers: list):
 

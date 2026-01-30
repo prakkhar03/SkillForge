@@ -10,24 +10,21 @@ class GenerateSkillTestAPI(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        category_id = request.data.get("category_id")
+        try:
+            attempt = generate_skill_test_for_student(request.user.id)
 
-        if not category_id:
+            return Response({
+                "attempt_id": attempt.id,
+                "category": attempt.category.name,
+                "questions": attempt.generated_questions,
+                "total_questions": attempt.total_questions
+            })
+
+        except Exception:
             return Response(
-                {"error": "category_id required"},
-                status=status.HTTP_400_BAD_REQUEST
+                {"error": "Failed to generate test"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
-
-        attempt = generate_skill_test_for_student(
-            request.user.id,
-            category_id
-        )
-
-        return Response({
-            "attempt_id": attempt.id,
-            "questions": attempt.generated_questions
-        })
-
 
 
 
@@ -51,8 +48,6 @@ class SubmitSkillTestAPI(APIView):
         )
 
         return Response(result)
-
-
 
 class PersonalityQuestionsAPI(APIView):
     permission_classes = [IsAuthenticated]
