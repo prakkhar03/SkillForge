@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useAuthStore } from '../../store/authStore';
 import Button from '../ui/Button';
@@ -6,15 +7,32 @@ import Input from '../ui/Input';
 import { Mail, Lock, User, Github, Linkedin, ArrowRight } from 'lucide-react';
 
 const LoginForm = () => {
-    const { setAuthMode } = useAuthStore();
+    const { setAuthMode, login } = useAuthStore();
+    const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
     const [formData, setFormData] = useState({ email: '', password: '' });
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
-        // Simulate API call
-        setTimeout(() => setLoading(false), 2000);
+        setError(null);
+        try {
+            const user = await login(formData.email, formData.password);
+            // Redirect based on role
+            if (user.role === 'student') {
+                navigate('/student/dashboard');
+            } else if (user.role === 'client') {
+                navigate('/client/dashboard');
+            } else {
+                // Fallback or admin
+                navigate('/');
+            }
+        } catch (err) {
+            setError(err.message || 'Login failed. Please check your credentials.');
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -75,6 +93,17 @@ const LoginForm = () => {
                     {loading ? 'Signing in...' : 'Sign In'}
                     {!loading && <ArrowRight className="w-5 h-5" />}
                 </Button>
+
+
+                {error && (
+                    <motion.p
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="text-red-500 text-sm font-medium text-center"
+                    >
+                        {error}
+                    </motion.p>
+                )}
             </form>
 
             <div className="relative my-8">
@@ -96,7 +125,7 @@ const LoginForm = () => {
             <p className="mt-8 text-center text-gray-500">
                 Don't have an account? <button onClick={() => setAuthMode('register')} className="font-bold text-blue-500 hover:underline">Create Account</button>
             </p>
-        </div>
+        </div >
     );
 };
 

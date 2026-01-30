@@ -2,6 +2,9 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import LandingPage from './pages/LandingPage';
 import AuthPage from './pages/AuthPage';
+import StudentDashboard from './pages/dashboard/StudentDashboard';
+import ClientDashboard from './pages/dashboard/ClientDashboard';
+import ClientOnboarding from './pages/client/ClientOnboarding';
 
 function App() {
   return (
@@ -12,6 +15,11 @@ function App() {
         {/* Redirect generic login/signup routes to /auth */}
         <Route path="/login" element={<Navigate to="/auth" replace />} />
         <Route path="/signup" element={<Navigate to="/auth" replace />} />
+
+        {/* Dashboards */}
+        <Route path="/student/dashboard" element={<StudentDashboard />} />
+        <Route path="/client/dashboard" element={<ClientDashboard />} />
+        <Route path="/client/onboarding" element={<ClientOnboarding />} />
       </Routes>
     </BrowserRouter>
   );
