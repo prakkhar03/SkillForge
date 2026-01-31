@@ -261,6 +261,10 @@ def submit_personality_assessment(user, answers):
         "score": total,
         "learning_level": level
     }
+import json
+import re
+
+
 def get_recommendation(student_id: int):
 
     report = StudentReport.objects.get(
@@ -271,14 +275,15 @@ def get_recommendation(student_id: int):
     final_data = summary.get("final")
 
     if not final_data:
-        return {
-            "status": "not_ready",
-            "message": "Complete skill test first"
-        }
+        return {"status": "not_ready"}
+
+    if isinstance(final_data, str):
+        cleaned = re.sub(r"```json|```", "", final_data).strip()
+        final_data = json.loads(cleaned)
 
     return {
         "status": "ready",
-        "recommendation": final_data,
+        **final_data,
         "personality_score": report.personality_score,
         "skill_score": report.skill_test_score,
         "stage": summary.get("stage")

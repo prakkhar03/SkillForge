@@ -17,14 +17,23 @@ def generate_upskill_module(student_id: int, topic: str):
     else:
         level = "slow"
 
-    content = generate_learning_module(topic, level)
+    result = generate_learning_module(topic, level)
+
+    if isinstance(result, str):
+        import re
+        import json
+        cleaned = re.sub(r"```[\w]*", "", result) 
+        cleaned = cleaned.strip()
+        result = json.loads(cleaned)
 
     module = UpskillModule.objects.create(
-        user=user,
-        topic=topic,
-        level=level,
-        content=str(content)
-    )
+    user=user,
+    topic=topic,
+    level=level,
+    content=result["content"],
+    ai_metadata=result["metadata"]
+)
+
 
     return module
 
