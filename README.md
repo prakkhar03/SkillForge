@@ -16,10 +16,12 @@
 
 [![React](https://img.shields.io/badge/React-18.2.0-61DAFB?logo=react&logoColor=white)](https://react.dev)
 [![Vite](https://img.shields.io/badge/Vite-5.0.8-646CFF?logo=vite&logoColor=white)](https://vitejs.dev)
+[![Django](https://img.shields.io/badge/Django-4.2-092E20?logo=django&logoColor=white)](https://www.djangoproject.com)
+[![Python](https://img.shields.io/badge/Python-3.11-3776ab?logo=python&logoColor=white)](https://www.python.org)
 [![Framer Motion](https://img.shields.io/badge/Framer%20Motion-10.16.16-FF0055?logo=framer&logoColor=white)](https://www.framer.com/motion/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-[🚀 Live Demo](#) • [📖 Documentation](#documentation) • [🎯 Features](#features) • [💻 Installation](#installation)
+[🚀 Live Demo](#) • [📖 Documentation](#documentation) • [🎯 Features](#features) • [💻 Installation](#installation) • [🐛 Troubleshooting](#troubleshooting) • [❓ FAQ](#faq)
 
 </div>
 
@@ -27,24 +29,33 @@
 
 ## 📑 Table of Contents
 
-- Overview
-- Screenshots
-- System Architecture
-- Key Features
-- Technology Stack
-- User Flows
-- Installation & Setup
-- Project Structure
-- API Integration
-- Security Features
-- Proctoring System
-- Dashboard & Portfolio
-- Job Matching System
-- Configuration
-- Development Guide
-- Deployment
-- Contributing
-- License
+- [Overview](#overview)
+- [Screenshots](#screenshots)
+- [System Architecture](#system-architecture)
+- [Key Features](#key-features)
+- [Technology Stack](#technology-stack)
+- [User Flows](#user-flows)
+- [Installation & Setup](#installation--setup)
+- [Environment Configuration](#environment-configuration)
+- [Project Structure](#project-structure)
+- [Database Schema](#database-schema)
+- [API Integration](#api-integration)
+- [Security Features](#security-features)
+- [Proctoring System](#proctoring-system)
+- [Dashboard & Portfolio](#dashboard--portfolio)
+- [Job Matching System](#job-matching-system)
+- [Configuration](#configuration)
+- [Development Guide](#development-guide)
+- [Testing & Quality Assurance](#testing--quality-assurance)
+- [Performance Optimization](#performance-optimization)
+- [Monitoring & Logging](#monitoring--logging)
+- [Deployment](#deployment)
+- [Common Issues & Troubleshooting](#common-issues--troubleshooting)
+- [FAQ](#faq)
+- [Roadmap](#roadmap)
+- [Support & Contact](#support--contact)
+- [Contributing](#contributing)
+- [License](#license)
 
 ---
 
@@ -376,34 +387,7 @@ npm run dev
 # Navigate to http://localhost:5173
 ```
 
-### Environment Variables
 
-Create a `.env` file in the root directory:
-
-```bash
-# API Configuration
-VITE_API_BASE_URL=http://127.0.0.1:8000/api
-
-# Proctoring Service
-VITE_PROCTOR_ENABLED=true
-VITE_PROCTOR_FACE_DETECTION_INTERVAL=20000
-
-# Feature Flags
-VITE_ENABLE_GITHUB_INTEGRATION=true
-VITE_ENABLE_LINKEDIN_IMPORT=true
-VITE_ENABLE_BLOCKCHAIN_VERIFICATION=true
-
-# Analytics
-VITE_ANALYTICS_ID=your-analytics-id
-
-# File Upload
-VITE_MAX_FILE_SIZE=10485760  # 10MB
-VITE_ALLOWED_FILE_TYPES=.pdf,.doc,.docx
-
-# Job Matching
-VITE_MATCHING_ALGORITHM=semantic-similarity
-VITE_MIN_MATCH_SCORE=0.7
-```
 
 ### Build for Production
 
@@ -418,6 +402,164 @@ npm run preview
 ```
 
 ---
+
+## 🔧 Environment Configuration
+
+### Frontend Environment Variables
+
+Create a `.env` file in the root directory:
+
+```bash
+# API Configuration
+VITE_API_BASE_URL=http://127.0.0.1:8000/api
+VITE_API_TIMEOUT=30000
+
+# Proctoring Service
+VITE_PROCTOR_ENABLED=true
+VITE_PROCTOR_FACE_DETECTION_INTERVAL=20000
+VITE_PROCTOR_VIDEO_QUALITY=medium
+VITE_PROCTOR_ENCRYPTION_ENABLED=true
+
+# Feature Flags
+VITE_ENABLE_GITHUB_INTEGRATION=true
+VITE_ENABLE_LINKEDIN_IMPORT=true
+VITE_ENABLE_BLOCKCHAIN_VERIFICATION=true
+VITE_ENABLE_JOB_MATCHING=true
+VITE_ENABLE_PORTFOLIO_GENERATION=true
+
+# Analytics
+VITE_ANALYTICS_ID=your-analytics-id
+VITE_ENABLE_ANALYTICS=true
+
+# File Upload
+VITE_MAX_FILE_SIZE=10485760  # 10MB
+VITE_ALLOWED_FILE_TYPES=.pdf,.doc,.docx,.txt
+VITE_UPLOAD_ENDPOINT=/api/upload
+
+# Job Matching
+VITE_MATCHING_ALGORITHM=semantic-similarity
+VITE_MIN_MATCH_SCORE=0.7
+VITE_MAX_RECOMMENDATIONS=10
+
+# Blockchain
+VITE_BLOCKCHAIN_ENABLED=true
+VITE_BLOCKCHAIN_NETWORK=ethereum
+VITE_BLOCKCHAIN_CONTRACT_ADDRESS=0x...
+
+# Miscellaneous
+VITE_APP_NAME=SkillForge
+VITE_APP_VERSION=1.0.0
+VITE_DEBUG_MODE=false
+```
+
+### Backend Environment Variables
+
+Create a `.env` file in the `skillforge/` directory:
+
+```bash
+# Django Configuration
+DEBUG=False
+SECRET_KEY=your-secret-key-here
+ALLOWED_HOSTS=localhost,127.0.0.1,yourdomain.com
+CORS_ALLOWED_ORIGINS=http://localhost:5173,https://yourdomain.com
+
+# Database
+DB_ENGINE=django.db.backends.postgresql
+DB_NAME=skillforge_db
+DB_USER=skillforge_user
+DB_PASSWORD=secure_password
+DB_HOST=localhost
+DB_PORT=5432
+
+# Email Configuration
+EMAIL_BACKEND=django.core.mail.backends.smtp.EmailBackend
+EMAIL_HOST=smtp.gmail.com
+EMAIL_PORT=587
+EMAIL_USE_TLS=True
+EMAIL_HOST_USER=your-email@gmail.com
+EMAIL_HOST_PASSWORD=your-app-password
+
+# JWT Configuration
+JWT_SECRET_KEY=your-jwt-secret
+JWT_ALGORITHM=HS256
+JWT_EXPIRATION_HOURS=24
+JWT_REFRESH_EXPIRATION_DAYS=7
+
+# AWS/Cloud Storage
+AWS_ACCESS_KEY_ID=your-access-key
+AWS_SECRET_ACCESS_KEY=your-secret-key
+AWS_STORAGE_BUCKET_NAME=skillforge-bucket
+AWS_S3_REGION_NAME=us-east-1
+
+# File Upload
+FILE_UPLOAD_MAX_SIZE=10485760
+ALLOWED_UPLOAD_EXTENSIONS=pdf,doc,docx,txt,jpg,png
+
+# Proctoring Service
+PROCTOR_API_KEY=your-proctor-api-key
+PROCTOR_WEBHOOK_SECRET=your-webhook-secret
+FACE_DETECTION_MODEL=mediapipe
+FACE_DETECTION_THRESHOLD=0.5
+
+# Analytics
+ANALYTICS_API_KEY=your-analytics-key
+LOG_LEVEL=INFO
+
+# Blockchain
+BLOCKCHAIN_ENABLED=true
+BLOCKCHAIN_NETWORK=ethereum
+BLOCKCHAIN_RPC_URL=http://localhost:8545
+BLOCKCHAIN_CONTRACT_ADDRESS=0x...
+BLOCKCHAIN_PRIVATE_KEY=your-private-key
+
+# Redis (for caching and task queues)
+REDIS_URL=redis://localhost:6379/0
+CACHE_TIMEOUT=3600
+
+# Media & Static Files
+MEDIA_URL=/media/
+STATIC_URL=/static/
+MEDIA_ROOT=media/
+STATIC_ROOT=staticfiles/
+
+# Security
+SECURE_SSL_REDIRECT=True
+SESSION_COOKIE_SECURE=True
+CSRF_COOKIE_SECURE=True
+SECURE_HSTS_SECONDS=31536000
+SECURE_HSTS_INCLUDE_SUBDOMAINS=True
+
+# Logging
+LOG_FILE_PATH=logs/django.log
+LOG_ROTATION_SIZE=10485760
+LOG_RETENTION_DAYS=30
+
+# Third-party Integrations
+GITHUB_CLIENT_ID=your-github-client-id
+GITHUB_CLIENT_SECRET=your-github-client-secret
+LINKEDIN_CLIENT_ID=your-linkedin-client-id
+LINKEDIN_CLIENT_SECRET=your-linkedin-client-secret
+
+# Testing
+TEST_ENVIRONMENT=false
+TEST_EMAIL_BACKEND=django.core.mail.backends.locmem.EmailBackend
+```
+
+### Environment Setup Checklist
+
+- [ ] Create `.env` files in both `Frontend/` and `skillforge/` directories
+- [ ] Install PostgreSQL and create database
+- [ ] Configure AWS S3 bucket for file storage
+- [ ] Set up Redis server for caching
+- [ ] Generate secure secret keys
+- [ ] Configure email service (Gmail, SendGrid, etc.)
+- [ ] Set up blockchain node/RPC endpoint
+- [ ] Configure third-party integrations (GitHub, LinkedIn)
+- [ ] Run database migrations
+- [ ] Create superuser account for admin panel
+- [ ] Test all environment variables
+
+
 
 ## 📁 Project Structure
 
@@ -505,6 +647,190 @@ skillforge-platform/
 ├── vite.config.js
 ├── README.md
 └── LICENSE
+```
+
+---
+
+## 🗄️ Database Schema
+
+### Core Models
+
+```
+User (Extended Django User)
+├── id (PK)
+├── username
+├── email
+├── password_hash
+├── first_name
+├── last_name
+├── role (student/recruiter/admin)
+├── profile_picture
+├── bio
+├── created_at
+├── updated_at
+└── is_active
+
+Student Profile
+├── id (PK)
+├── user_id (FK)
+├── bio
+├── phone
+├── location
+├── github_url
+├── linkedin_url
+├── portfolio_url
+├── resume_url
+├── skill_cibil_score (0-1000)
+├── learning_streak
+├── verified_skills (JSON)
+├── verified_badges (JSON)
+├── created_at
+└── updated_at
+
+Recruiter/Company Profile
+├── id (PK)
+├── user_id (FK)
+├── company_name
+├── company_size
+├── industry
+├── website
+├── location
+├── description
+├── logo_url
+├── verified
+└── created_at
+
+Skill
+├── id (PK)
+├── name
+├── category
+├── description
+├── level (beginner/intermediate/advanced/expert)
+├── created_at
+└── updated_at
+
+Assessment/Exam
+├── id (PK)
+├── title
+├── description
+├── duration (minutes)
+├── passing_score
+├── related_skill_id (FK)
+├── questions (JSON/Array)
+├── created_by (FK to User)
+├── status (draft/published/archived)
+├── created_at
+└── updated_at
+
+ExamSession
+├── id (PK)
+├── exam_id (FK)
+├── student_id (FK)
+├── start_time
+├── end_time
+├── duration_seconds
+├── score
+├── status (in_progress/completed/abandoned)
+├── answers (JSON)
+├── created_at
+└── updated_at
+
+ProctoringEvent
+├── id (PK)
+├── session_id (FK to ExamSession)
+├── event_type (TAB_SWITCH, NO_FACE, etc.)
+├── confidence (0.0-1.0)
+├── timestamp
+├── metadata (JSON)
+├── risk_score
+└── recorded_at
+
+Job
+├── id (PK)
+├── title
+├── description
+├── company_id (FK)
+├── salary_min
+├── salary_max
+├── location
+├── job_type (full-time/part-time/contract)
+├── required_skills (JSON)
+├── preferred_skills (JSON)
+├── experience_level
+├── status (open/closed/draft)
+├── created_at
+├── expires_at
+└── updated_at
+
+JobApplication
+├── id (PK)
+├── job_id (FK)
+├── student_id (FK)
+├── status (pending/shortlisted/rejected/offered)
+├── cover_letter
+├── match_score (0-100)
+├── applied_at
+├── response_at
+└── updated_at
+
+Portfolio
+├── id (PK)
+├── student_id (FK)
+├── title
+├── theme
+├── sections (JSON)
+├── skills (JSON)
+├── projects (JSON)
+├── verified_badges (JSON)
+├── url_slug
+├── is_public
+├── created_at
+└── updated_at
+
+Credential/Badge
+├── id (PK)
+├── name
+├── description
+├── icon_url
+├── skill_id (FK)
+├── issued_to_id (FK to Student)
+├── blockchain_hash
+├── qr_code
+├── issued_at
+└── expires_at
+
+Learning Roadmap
+├── id (PK)
+├── student_id (FK)
+├── title
+├── modules (JSON)
+├── progress_percentage
+├── estimated_completion_date
+├── status (not_started/in_progress/completed)
+├── created_at
+└── updated_at
+```
+
+### Database Relationships
+
+```
+User (1) -----> (1) Student Profile
+User (1) -----> (1) Recruiter Profile
+User (1) -----> (N) ExamSession
+User (1) -----> (N) Job (created_by)
+User (1) -----> (N) Credential
+
+Skill (1) -----> (N) Assessment
+Skill (1) -----> (N) Credential
+
+Assessment (1) -----> (N) ExamSession
+ExamSession (1) -----> (N) ProctoringEvent
+
+Job (1) -----> (N) JobApplication
+Student (1) -----> (N) JobApplication
+Student (1) -----> (1) Portfolio
+Student (1) -----> (N) Credential
+Student (1) -----> (1) Learning Roadmap
 ```
 
 ---
@@ -1103,7 +1429,510 @@ const Proctor = React.lazy(() => import('./components/Proctor'));
 
 ---
 
-## 🤝 Contributing
+## � Testing & Quality Assurance
+
+### Frontend Testing
+
+```bash
+# Run unit tests with Vitest
+npm run test
+
+# Run unit tests in watch mode
+npm run test:watch
+
+# Run tests with coverage report
+npm run test:coverage
+
+# Run E2E tests with Playwright
+npm run test:e2e
+
+# Run linting checks
+npm run lint
+
+# Fix linting issues automatically
+npm run lint:fix
+
+# Format code with Prettier
+npm run format
+
+# Check code formatting without changes
+npm run format:check
+```
+
+### Backend Testing
+
+```bash
+# Run Django tests
+python manage.py test
+
+# Run tests with coverage
+coverage run --source='.' manage.py test
+coverage report
+
+# Run specific test module
+python manage.py test skillforge.accounts.tests
+
+# Run with verbose output
+python manage.py test --verbosity=2
+
+# Run tests in parallel (faster)
+python manage.py test --parallel
+```
+
+### Test Coverage Requirements
+
+- **Minimum Coverage:** 80% across all modules
+- **Critical Paths:** 100% (authentication, payments, security)
+- **UI Components:** 75% snapshot + interaction tests
+- **API Endpoints:** 90% happy path + error cases
+
+### Quality Assurance Checklist
+
+- [ ] All unit tests passing
+- [ ] All integration tests passing
+- [ ] All E2E tests passing
+- [ ] Code coverage meets minimum threshold
+- [ ] No ESLint warnings/errors
+- [ ] No unanswered TypeScript issues
+- [ ] Security vulnerabilities scanned (`npm audit`)
+- [ ] Performance benchmarks met
+- [ ] Accessibility score (axe-core) > 90
+- [ ] Cross-browser compatibility verified
+- [ ] Mobile responsiveness verified
+- [ ] API documentation updated
+- [ ] CHANGELOG updated
+
+### Pre-commit Hooks
+
+The project uses Husky to run checks before commits:
+
+```bash
+# Install husky
+npm install husky --save-dev
+husky install
+
+# Hooks automatically run:
+# - lint-staged (format and lint changed files)
+# - Unit tests for changed files
+```
+
+---
+
+## 📊 Monitoring & Logging
+
+### Frontend Monitoring
+
+```javascript
+// Error tracking with Sentry
+import * as Sentry from "@sentry/react";
+
+Sentry.init({
+  dsn: "your-sentry-dsn",
+  environment: process.env.NODE_ENV,
+  tracesSampleRate: 1.0,
+  integrations: [
+    new Sentry.Replay({
+      maskAllText: true,
+      blockAllMedia: true,
+    }),
+  ],
+});
+
+// Performance monitoring
+const perfObserver = new PerformanceObserver((list) => {
+  for (const entry of list.getEntries()) {
+    console.log(`${entry.name}: ${entry.duration}ms`);
+  }
+});
+
+perfObserver.observe({ entryTypes: ["measure", "navigation"] });
+```
+
+### Backend Logging
+
+```python
+# Django logging configuration
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '[{levelname}] {asctime} {name} {funcName} {lineno} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose',
+        },
+        'file': {
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': 'logs/django.log',
+            'maxBytes': 1024 * 1024 * 10,  # 10MB
+            'backupCount': 5,
+            'formatter': 'verbose',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console', 'file'],
+            'level': 'INFO',
+        },
+        'skillforge': {
+            'handlers': ['console', 'file'],
+            'level': 'DEBUG',
+        },
+    },
+}
+```
+
+### Key Metrics to Monitor
+
+**Frontend Metrics:**
+- Page Load Time
+- Time to Interactive (TTI)
+- First Contentful Paint (FCP)
+- Cumulative Layout Shift (CLS)
+- JavaScript Error Rate
+- API Response Times
+- User Session Duration
+
+**Backend Metrics:**
+- API Response Times (p50, p95, p99)
+- Error Rate by Endpoint
+- Database Query Performance
+- Cache Hit Ratio
+- Queue Processing Time
+- Memory Usage
+- CPU Usage
+- Active Connections
+
+**Business Metrics:**
+- User Signup Conversion Rate
+- Assessment Completion Rate
+- Job Application Success Rate
+- Candidate Matching Accuracy
+- User Retention Rate
+
+### Monitoring Tools
+
+```bash
+# Backend monitoring options
+- Prometheus + Grafana (metrics)
+- ELK Stack (logs)
+- Jaeger (distributed tracing)
+- New Relic (APM)
+- DataDog (monitoring)
+
+# Frontend monitoring options
+- Sentry (error tracking)
+- LogRocket (session replay)
+- Datadog RUM (real user monitoring)
+- Google Analytics (business metrics)
+```
+
+---
+
+## 🐛 Common Issues & Troubleshooting
+
+### Frontend Issues
+
+#### Issue: Blank white screen after deployment
+**Solution:**
+```bash
+# Clear cache and rebuild
+rm -rf node_modules dist
+npm install
+npm run build
+
+# Check environment variables are set correctly
+# Verify VITE_API_BASE_URL is correct
+```
+
+#### Issue: CORS errors when calling API
+**Solution:**
+```javascript
+// Frontend: Check API client configuration
+// Verify VITE_API_BASE_URL matches backend CORS_ALLOWED_ORIGINS
+
+// Backend (Django settings.py):
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+    "https://yourdomain.com",
+]
+```
+
+#### Issue: Proctoring video not starting
+**Solution:**
+```javascript
+// Check browser permissions
+// Ensure HTTPS in production
+// Verify camera and microphone are available
+// Check WebRTC support in browser
+
+// Debug in browser console:
+navigator.mediaDevices.enumerateDevices().then(devices => {
+  console.log(devices);
+});
+```
+
+#### Issue: File upload fails
+**Solution:**
+```javascript
+// Check file size limit
+console.log(import.meta.env.VITE_MAX_FILE_SIZE);
+
+// Verify file type is allowed
+const allowed = import.meta.env.VITE_ALLOWED_FILE_TYPES.split(',');
+
+// Check upload endpoint configuration
+// Verify server is accepting multipart/form-data
+```
+
+### Backend Issues
+
+#### Issue: Database connection refused
+**Solution:**
+```bash
+# Check PostgreSQL is running
+sudo systemctl status postgresql
+
+# Verify database credentials in .env
+# Check host, port, username, password
+
+# Create database if missing:
+createdb skillforge_db
+createuser skillforge_user
+psql skillforge_db
+# ALTER USER skillforge_user WITH PASSWORD 'password';
+# GRANT ALL PRIVILEGES ON DATABASE skillforge_db TO skillforge_user;
+```
+
+#### Issue: Migration errors
+**Solution:**
+```bash
+# Check migration status
+python manage.py showmigrations
+
+# Revert migrations if needed
+python manage.py migrate <app_name> <migration_number>
+
+# Create new migrations
+python manage.py makemigrations
+
+# Apply migrations
+python manage.py migrate
+
+# Check for unapplied migrations
+python manage.py migrate --plan
+```
+
+#### Issue: Static files not serving
+**Solution:**
+```bash
+# Collect static files
+python manage.py collectstatic --noinput
+
+# In production, serve with whitenoise
+# pip install whitenoise
+
+# Add to Django settings:
+MIDDLEWARE = [
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+    ...
+]
+```
+
+#### Issue: Celery tasks not executing
+**Solution:**
+```bash
+# Check if Celery worker is running
+celery -A skillforge worker -l info
+
+# Check if Redis is running
+redis-cli ping
+
+# Check task queue:
+celery -A skillforge inspect active
+
+# Purge tasks if stuck:
+celery -A skillforge purge
+```
+
+### API Issues
+
+#### Issue: JWT token expired
+**Solution:**
+```javascript
+// Refresh token automatically
+const refreshToken = async () => {
+  const response = await fetch('/api/auth/refresh/', {
+    method: 'POST',
+    body: JSON.stringify({ refresh: localStorage.getItem('refresh_token') }),
+  });
+  const { access } = await response.json();
+  localStorage.setItem('access_token', access);
+};
+```
+
+#### Issue: Rate limiting errors (429)
+**Solution:**
+```javascript
+// Implement exponential backoff retry logic
+const retryRequest = async (fn, maxRetries = 3) => {
+  for (let i = 0; i < maxRetries; i++) {
+    try {
+      return await fn();
+    } catch (error) {
+      if (error.status === 429 && i < maxRetries - 1) {
+        const delay = Math.pow(2, i) * 1000;
+        await new Promise(resolve => setTimeout(resolve, delay));
+      } else {
+        throw error;
+      }
+    }
+  }
+};
+```
+
+---
+
+## ❓ FAQ
+
+### General Questions
+
+**Q: What is the minimum system requirement?**
+A: Node.js 18+, Python 3.11+, PostgreSQL 12+, Redis 6+
+
+**Q: Can I self-host SkillForge?**
+A: Yes, the platform is fully open-source and can be self-hosted on any cloud provider or on-premise.
+
+**Q: What payment methods are supported?**
+A: Currently supports Stripe integration. More payment gateways can be added through the plugin system.
+
+**Q: Is SkillForge GDPR compliant?**
+A: Yes, the platform includes GDPR compliance features including data export, deletion, and consent management.
+
+### Technical Questions
+
+**Q: How do I set up proctoring for exams?**
+A: Install the proctoring system, configure the face detection model, and enable in environment variables. See the Proctoring System section for details.
+
+**Q: Can I customize the job matching algorithm?**
+A: Yes, the matching algorithm is configurable in `skillforge/modules/services.py`. You can modify weights, thresholds, and algorithms.
+
+**Q: How are credentials stored and verified?**
+A: Credentials are stored in PostgreSQL, optionally backed by blockchain. Each credential has a QR code for verification.
+
+**Q: What video conferencing integration is available?**
+A: Currently uses WebRTC with Jitsi. Can be integrated with Zoom, Google Meet, or other providers via API.
+
+**Q: How do I integrate with GitHub for portfolio sync?**
+A: Configure GitHub OAuth2 credentials and enable `VITE_ENABLE_GITHUB_INTEGRATION=true` in environment variables.
+
+### Deployment Questions
+
+**Q: How do I deploy to production?**
+A: Use Docker or traditional server setup. Refer to the Deployment section. Recommended: AWS ECS, Heroku, or DigitalOcean.
+
+**Q: What is the recommended database for production?**
+A: PostgreSQL 14+. MySQL 8+ can also be used. Avoid SQLite in production.
+
+**Q: How do I set up SSL/HTTPS?**
+A: Use Let's Encrypt with Nginx/Apache reverse proxy, or use platform-provided SSL (AWS Certificate Manager, etc.).
+
+**Q: What is the best way to backup data?**
+A: Configure automated daily database backups. For S3, enable versioning. Monitor backup logs regularly.
+
+### Performance Questions
+
+**Q: How many concurrent users can the system handle?**
+A: Depends on infrastructure. A standard setup handles ~5,000 concurrent users. Scale horizontally with load balancing.
+
+**Q: How long do proctored exams take to process?**
+A: Real-time monitoring + 2-5 minutes for result generation depending on exam complexity.
+
+**Q: What is the maximum file upload size?**
+A: Default is 10MB, configurable via `VITE_MAX_FILE_SIZE` and `FILE_UPLOAD_MAX_SIZE`.
+
+**Q: How often is the skill matching algorithm updated?**
+A: Daily, with manual updates as needed. Can be configured via cron job or Celery beat.
+
+---
+
+## 🚀 Roadmap
+
+### Phase 1: Current (Q1-Q2 2026)
+- [x] Core authentication system
+- [x] Proctored assessment engine
+- [x] Basic job matching
+- [x] Portfolio generation
+- [x] Skill verification
+
+### Phase 2: Q3 2026
+- [ ] Advanced analytics dashboard
+- [ ] AI-powered learning recommendations
+- [ ] Video interview integration
+- [ ] Bulk candidate import (for recruiters)
+- [ ] API rate limiting and monitoring
+
+### Phase 3: Q4 2026
+- [ ] Blockchain credential verification
+- [ ] Mobile app (React Native)
+- [ ] Real-time notifications (push)
+- [ ] Advanced reporting for recruiters
+- [ ] Skill endorsements system
+
+### Phase 4: 2027
+- [ ] AI resume optimization suggestions
+- [ ] Integration with ATS (Applicant Tracking System)
+- [ ] Video assessment auto-grading
+- [ ] Salary prediction model
+- [ ] Enterprise SSO (SAML/OAuth)
+
+### Future Possibilities
+- [ ] Gamification system (badges, leaderboards)
+- [ ] Peer-to-peer mentoring
+- [ ] Mock interview preparation
+- [ ] Subscription tier system
+- [ ] White-label platform offering
+
+---
+
+## 📞 Support & Contact
+
+### Getting Help
+
+**Documentation:** [Full Documentation](./docs)
+
+**Email Support:** support@skillforge.com
+
+**Discord Community:** [Join Discord Server](https://discord.gg/skillforge)
+
+**GitHub Issues:** [Report Issues](https://github.com/skillforge/skillforge/issues)
+
+**Twitter:** [@SkillForgeApp](https://twitter.com/skillforgeapp)
+
+### Reporting Security Issues
+
+Please report security vulnerabilities to: **security@skillforge.com**
+Do not open public issues for security concerns.
+
+### Feature Requests
+
+Submit feature requests via:
+- GitHub Discussions
+- Discord #feature-requests
+- Email to features@skillforge.com
+
+### Feedback & Suggestions
+
+We'd love to hear from you! Share feedback at: feedback@skillforge.com
+
+---
+
+## �🤝 Contributing
 
 We welcome contributions from the community! Please read our [Contributing Guide](CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
 
